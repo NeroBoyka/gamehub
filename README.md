@@ -11,13 +11,16 @@ Users can search and browse for games, and look up details about them. This proj
 - [Pynecone](https://github.com/pynecone-io/pynecone)
 - [Sqlite](https://www.sqlite.org/index.html)
 - [Poetry](https://python-poetry.org/)
+- [Pair programming](https://martinfowler.com/articles/on-pair-programming.html)
+- [Conventional commits](https://www.conventionalcommits.org/en/v1.0.0/)
 
 ## Data Sources
 We plan to use the following APIs to aggregate information about video games:
-- API 1 (placeholder)
-- API 2 (placeholder)
-- API 3 (placeholder)
 
+- [RAWG Video Games Database API](https://rapidapi.com/accujazz/api/rawg-video-games-database)
+- [IGDB API](https://rapidapi.com/stefan.skliarov/api/GameDatabase)
+- [SteamWeb API](https://rapidapi.com/search/steam)
+- [OpenCritic API](https://rapidapi.com/opencritic-opencritic-default/api/opencritic-api)
 
 ## Contributions and Feedback Welcome
 We welcome contributions and feedback from the open-source community.
