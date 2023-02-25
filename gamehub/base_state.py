@@ -8,20 +8,6 @@ class User(pc.Model, table=True):
     password: str
 
 
-# class Tweet(pc.Model, table=True):
-#     """A table of Tweets."""
-
-#     username: str
-#     tweet: str
-#     time: str
-
-
-# class Friends(pc.Model, table=True):
-#     """A table of Friends."""
-
-#     username: str
-#     friend: str
-
 
 class State(pc.State):
     """The base state for the app."""
@@ -33,3 +19,6 @@ class State(pc.State):
         """Log out a user."""
         self.reset()
         return pc.redirect("/")
+    
+
+    
