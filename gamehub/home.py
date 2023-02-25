@@ -2,26 +2,71 @@ import pynecone as pc
 from .base_state import *
 from .helpers import navbar
 import datetime
-
-
 import requests
 import json
+from dataclasses import dataclass
 
 
-url = "https://opencritic-api.p.rapidapi.com/game"
+@dataclass
+class Game:
+    url: str
 
-querystring = {"platforms":"pc","sort":"score","skip":"20"}
 
-headers = {
-	"X-RapidAPI-Key": "c125bd5691msh169e59f86f32db9p1cf1aejsnba25dba52c95",
-	"X-RapidAPI-Host": "opencritic-api.p.rapidapi.com"
-}
+def get_data()-> list[Game]: 
+    url = "https://opencritic-api.p.rapidapi.com/game"
 
-response = requests.request("GET", url, headers=headers, params=querystring)
+    querystring = {"platforms":"pc","sort":"score","skip":"20"}
 
-data = json.loads(response.text)
+    headers = {
+        "X-RapidAPI-Key": "c125bd5691msh169e59f86f32db9p1cf1aejsnba25dba52c95",
+        "X-RapidAPI-Host": "opencritic-api.p.rapidapi.com"
+    }
 
-print(data[0]['url'])
+    response = requests.request("GET", url, headers=headers, params=querystring)
+
+    data = json.loads(response.text)
+    
+    games = []
+    for x in data:
+        games.append(Game(url=x['url']))
+
+    return games
+
+
+# print(data[0]['url'])
+
+class HomeState(State):
+    games: list[Game] = get_data()
+
+
+
+def linker(game: Game):
+    return pc.link(
+                pc.image(
+                src="/momy.jpg",
+                width="auto",
+                height="auto",
+                ),
+                href=game.url,
+            )
+
+
+def home():
+    games = get_data()
+    """The home page."""
+    return pc.center(
+        navbar(State),
+
+        pc.foreach(
+            games,
+            linker
+        ),
+        
+        padding_top="6em",
+    )
+
+app = pc.App(state=HomeState)
+
 
 """
 {
@@ -45,25 +90,3 @@ print(data[0]['url'])
     'url': 'https://opencritic.com/game/4002/hollow-knight'
 }
 """
-
-
-def home():
-    """The home page."""
-    return pc.center(
-        navbar(State),
-        
-        pc.foreach(
-            data,
-            lambda game: pc.link(
-                                pc.text(type(game)),
-                                pc.image(
-                                src="/momy.jpg",
-                                width="auto",
-                                height="auto",
-                                ),
-                                href="/",
-                            ),
-        ),
-        
-        padding_top="6em",
-    )
