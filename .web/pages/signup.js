@@ -60,18 +60,21 @@ size="md"/>
 <MenuDivider/>
 <NextLink href="#"
 passHref={true}><Link onClick={() => Event([E("state.logout", {})])}><MenuItem>{`Sign Out`}</MenuItem></Link></NextLink></MenuList></Menu></HStack></Box>
-<Center sx={{"shadow": "lg", "padding": "1em", "borderRadius": "lg", "background": "white"}}><VStack><Input type="text"
+<Center sx={{"shadow": "lg", "padding": "1em", "borderRadius": "lg", "background": "white"}}><VStack><Heading sx={{"fontSize": "1.5em"}}>{`Sign Up`}</Heading>
+<Input type="text"
 placeholder="Username"
 onBlur={(_e) => Event([E("state.set_username", {value:_e.target.value})])}
 sx={{"width": "100%"}}/>
-<Input type="password"
+<Input type="text"
 placeholder="Password"
 onBlur={(_e) => Event([E("state.auth_state.set_password", {value:_e.target.value})])}
 sx={{"width": "100%"}}/>
-<Button onClick={() => Event([E("state.auth_state.login", {})])}
-sx={{"width": "100%"}}>{`Login`}</Button>
-<NextLink href="/signup"
-passHref={true}><Link sx={{"width": "100%"}}><Button sx={{"width": "100%"}}>{`Sign Up`}</Button></Link></NextLink></VStack></Center></VStack>
+<Input type="text"
+placeholder="Confirm Password"
+onBlur={(_e) => Event([E("state.auth_state.set_confirm_password", {value:_e.target.value})])}
+sx={{"width": "100%"}}/>
+<Button onClick={() => Event([E("state.auth_state.signup", {})])}
+sx={{"width": "100%"}}>{`Sign Up`}</Button></VStack></Center></VStack>
 <NextHead><title>{`Pynecone App`}</title>
 <meta content="A Pynecone app."
 name="description"/>
