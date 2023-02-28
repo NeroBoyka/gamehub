@@ -4,13 +4,37 @@ from .helpers import navbar
 import datetime
 import requests
 import json
-from dataclasses import dataclass
 
+# -----------------------------------------------------------------------------------
 
-@dataclass
-class Game:
+style_image={
+    "width": "130px",
+    "height": "180px",
+    "border": "2px solid #ccc",
+    "boxShadow": "0 0 5px rgba(0,0,0,0.3)",
+    "borderRadius": "5px",
+}
+
+style_link={
+    "width": "150px",
+    "height": "auto",
+    "border": "4px solid #ccc",
+    "transition": "transform .2s",
+}
+
+# -----------------------------------------------------------------------------------
+
+class Game(pc.Base):
     url: str
+    percentRecommended: int
+    numReviews: int
+    topCriticScore: float
+    tier: str
+    name: str
+    id: int
+    firstReleaseDate: str
 
+# -----------------------------------------------------------------------------------
 
 def get_data()-> list[Game]: 
     url = "https://opencritic-api.p.rapidapi.com/game"
@@ -24,42 +48,79 @@ def get_data()-> list[Game]:
 
     response = requests.request("GET", url, headers=headers, params=querystring)
 
-    data = json.loads(response.text)
+    data = json.loads(response.text)    
     
     games = []
+    
     for x in data:
-        games.append(Game(url=x['url']))
+        game = Game(
+            url=x['url'],
+            percentRecommended=x['percentRecommended'],
+            numReviews=x['numReviews'],
+            topCriticScore=x['topCriticScore'],
+            tier=x['tier'],
+            name=x['name'],
+            id=x['id'],
+            firstReleaseDate=x['firstReleaseDate']
+        )
+        games.append(game)
+
+    # games.append(Game(url=x['url']))
 
     return games
 
-
-# print(data[0]['url'])
-
-class HomeState(State):
-    games: list[Game] = get_data()
-
-
+# -----------------------------------------------------------------------------------
 
 def linker(game: Game):
     return pc.link(
-                pc.image(
-                src="/momy.jpg",
-                width="auto",
-                height="auto",
+                pc.vstack(
+                    pc.image(
+                    src="/momy.jpg",
+                    style=style_image,
+                    ),
+
+                    pc.text(game.numReviews),
+                    # pc.text(type(game.topCriticScore)),
+
+                    pc.hstack(
+                        pc.icon(tag="star"),
+                        pc.text(game.name),
+                    ),
+
+                    href=game.url,
+                    
+                    padding = "5px",
                 ),
-                href=game.url,
+                _hover={
+                        "transform": "scale(1.25)",
+                },
+                style=style_link,
             )
 
 
+# -----------------------------------------------------------------------------------
+
+class HomeState(State):
+    @pc.var
+    def games(self) ->list[Game]:
+        return  get_data()
+
+# -----------------------------------------------------------------------------------
+
 def home():
-    games = get_data()
+
     """The home page."""
-    return pc.center(
+    return pc.vstack(
         navbar(State),
 
-        pc.foreach(
-            games,
-            linker
+        pc.heading("Popular Games"),
+        pc.text("Don't miss the most popular games on OpenCritics today"),
+
+        pc.hstack(
+            pc.foreach(
+                HomeState.games,
+                linker,
+        )
         ),
         
         padding_top="6em",
