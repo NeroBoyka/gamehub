@@ -110,21 +110,24 @@ class HomeState(State):
 def home():
 
     """The home page."""
-    return pc.vstack(
-        navbar(State),
+    return pc.box(
+        pc.vstack(
+            navbar(State),
 
-        pc.heading("Popular Games"),
-        pc.text("Don't miss the most popular games on OpenCritics today"),
+            pc.heading("Popular Games"),
+            pc.text("Don't miss the most popular games on OpenCritics today"),
 
-        pc.hstack(
-            pc.foreach(
-                HomeState.games,
-                linker,
+            pc.hstack(
+                pc.foreach(
+                    HomeState.games,
+                    linker,
+            )
+            ),
+            
+            padding_top="6em",
         )
-        ),
-        
-        padding_top="6em",
     )
+    
 
 app = pc.App(state=HomeState)
 

@@ -28,6 +28,14 @@ def navbar(State):
                     pc.link(pc.menu_item("Sign Out"), on_click=State.logout),
                 ),
             ),
+            pc.hstack(
+                pc.input(
+                    placeholder="Search something..."
+                ),
+                pc.icon(
+                    tag="calendar",
+                )
+            ),
             justify="space-between",
             border_bottom="0.2em solid #F0F0F0",
             padding_x="2em",

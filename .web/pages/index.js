@@ -2,9 +2,9 @@ import {useEffect, useRef, useState} from "react"
 import {useRouter} from "next/router"
 import {E, connect, updateState} from "/utils/state"
 import "focus-visible/dist/focus-visible"
-import {Avatar, Box, Center, HStack, Heading, Image, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, VStack, useColorMode} from "@chakra-ui/react"
+import {Avatar, Box, Center, HStack, Heading, Image, Input, Link, Menu, MenuButton, MenuDivider, MenuItem, MenuList, Text, VStack, useColorMode} from "@chakra-ui/react"
 import NextLink from "next/link"
-import {star} from "@chakra-ui/icons"
+import {calendar, star} from "@chakra-ui/icons"
 import NextHead from "next/head"
 
 const EVENT = "ws://localhost:8000/event"
@@ -49,9 +49,9 @@ useEffect(() => {
   update()
 })
 return (
-<VStack sx={{"paddingTop": "6em"}}><Box sx={{"position": "fixed", "width": "100%", "top": "0px", "zIndex": "500"}}><HStack justify="space-between"
-sx={{"borderBottom": "0.2em solid #F0F0F0", "paddingX": "2em", "paddingY": "1em", "bg": "rgba(255,255,255, 1)"}}><NextLink href="/"
-passHref={true}><Link><HStack><Image src="favicon.ico"/>
+<Box><VStack sx={{"paddingTop": "6em"}}><Box sx={{"position": "fixed", "width": "100%", "top": "0px", "zIndex": "500"}}><HStack justify="space-between"
+sx={{"borderBottom": "0.2em solid #F0F0F0", "paddingX": "2em", "paddingY": "1em", "bg": "rgba(255,255,255, 1)"}}><NextLink passHref={true}
+href="/"><Link><HStack><Image src="favicon.ico"/>
 <Heading>{`GameHub`}</Heading></HStack></Link></NextLink>
 <Menu><MenuButton>{state.logged_in ? <Avatar size="md"
 name={state.username}/> : <Box/>}</MenuButton>
@@ -59,21 +59,24 @@ name={state.username}/> : <Box/>}</MenuButton>
 name={state.username}/>
 <Text>{state.username}</Text></VStack></Center>
 <MenuDivider/>
-<NextLink href="#"
-passHref={true}><Link onClick={() => Event([E("state.logout", {})])}><MenuItem>{`Sign Out`}</MenuItem></Link></NextLink></MenuList></Menu></HStack></Box>
+<NextLink passHref={true}
+href="#"><Link onClick={() => Event([E("state.logout", {})])}><MenuItem>{`Sign Out`}</MenuItem></Link></NextLink></MenuList></Menu>
+<HStack><Input type="text"
+placeholder="Search something..."/>
+<calendar/></HStack></HStack></Box>
 <Heading>{`Popular Games`}</Heading>
 <Text>{`Don't miss the most popular games on OpenCritics today`}</Text>
-<HStack>{state.home_state.games.map((kjnhellf, i) => <NextLink href="#"
-passHref={true}
-key={i}><Link sx={{"width": "150px", "height": "auto", "border": "4px solid #ccc", "transition": "transform .2s", "_hover": {"transform": "scale(1.25)"}}}><VStack sx={{"href": kjnhellf.url, "padding": "5px"}}><Image src="/momy.jpg"
+<HStack>{state.home_state.games.map((urttmsco, i) => <NextLink passHref={true}
+href="#"
+key={i}><Link sx={{"width": "150px", "height": "auto", "border": "4px solid #ccc", "transition": "transform .2s", "_hover": {"transform": "scale(1.25)"}}}><VStack sx={{"href": urttmsco.url, "padding": "5px"}}><Image src="/momy.jpg"
 sx={{"width": "130px", "height": "180px", "border": "2px solid #ccc", "boxShadow": "0 0 5px rgba(0,0,0,0.3)", "borderRadius": "5px"}}/>
-<Text>{kjnhellf.numReviews}</Text>
+<Text>{urttmsco.numReviews}</Text>
 <HStack><star/>
-<Text>{`kjnhellf`}</Text></HStack></VStack></Link></NextLink>)}</HStack>
+<Text>{`urttmsco`}</Text></HStack></VStack></Link></NextLink>)}</HStack></VStack>
 <NextHead><title>{`Pynecone App`}</title>
-<meta content="A Pynecone app."
-name="description"/>
-<meta content="favicon.ico"
-property="og:image"/></NextHead></VStack>
+<meta name="description"
+content="A Pynecone app."/>
+<meta property="og:image"
+content="favicon.ico"/></NextHead></Box>
 )
 }
