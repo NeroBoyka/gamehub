@@ -8,8 +8,9 @@ import json
 # -----------------------------------------------------------------------------------
 
 style_image={
-    "width": "130px",
-    "height": "180px",
+    "width": "100%",
+    "maxWidth": "365px",
+    "height": "auto",
     "border": "2px solid #ccc",
     "boxShadow": "0 0 5px rgba(0,0,0,0.3)",
     "borderRadius": "5px",
@@ -17,36 +18,45 @@ style_image={
 
 style_link={
     "width": "150px",
-    "height": "auto",
-    "border": "4px solid #ccc",
+    "height": "230px",
+    "border": "px solid #ccc",
     "transition": "transform .2s",
+    "boxShadow": "rgba(255, 255, 255, 0.1) 0px 1px 1px 0px inset, rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px",
+
+}
+
+style_list_game={
+    # "maxWidth": "1000px",
+    # "width": "100%",
+    # "overflow": "auto",
 }
 
 # -----------------------------------------------------------------------------------
 
 class Game(pc.Base):
-    url: str
-    percentRecommended: int
-    numReviews: int
-    topCriticScore: float
-    tier: str
-    name: str
-    id: int
-    firstReleaseDate: str
+    id: str
+    title: str
+    thumbnail: str
+    short_description: str
+    game_url: str
+    genre: str
+    platform: str
+    publisher: str
+    developer: str
+    release_date: str
+    freetogame_profile_url: str
 
 # -----------------------------------------------------------------------------------
 
 def get_data()-> list[Game]: 
-    url = "https://opencritic-api.p.rapidapi.com/game"
-
-    querystring = {"platforms":"pc","sort":"score","skip":"20"}
+    url = "https://free-to-play-games-database.p.rapidapi.com/api/games"
 
     headers = {
         "X-RapidAPI-Key": "c125bd5691msh169e59f86f32db9p1cf1aejsnba25dba52c95",
-        "X-RapidAPI-Host": "opencritic-api.p.rapidapi.com"
+        "X-RapidAPI-Host": "free-to-play-games-database.p.rapidapi.com"
     }
 
-    response = requests.request("GET", url, headers=headers, params=querystring)
+    response = requests.request("GET", url, headers=headers)
 
     data = json.loads(response.text)    
     
@@ -54,18 +64,19 @@ def get_data()-> list[Game]:
     
     for x in data:
         game = Game(
-            url=x['url'],
-            percentRecommended=x['percentRecommended'],
-            numReviews=x['numReviews'],
-            topCriticScore=x['topCriticScore'],
-            tier=x['tier'],
-            name=x['name'],
             id=x['id'],
-            firstReleaseDate=x['firstReleaseDate']
+            title=x['title'],
+            thumbnail=x['thumbnail'],
+            short_description=x['short_description'],
+            game_url=x['game_url'],
+            genre=x['genre'],
+            platform=x['platform'],
+            publisher=x['publisher'],
+            developer=x['developer'],
+            release_date=x['release_date'],
+            freetogame_profile_url=x['freetogame_profile_url'],
         )
         games.append(game)
-
-    # games.append(Game(url=x['url']))
 
     return games
 
@@ -75,22 +86,21 @@ def linker(game: Game):
     return pc.link(
                 pc.vstack(
                     pc.image(
+                    # src=game.thumbnail,
                     src="/momy.jpg",
                     style=style_image,
                     ),
 
-                    pc.text(game.numReviews),
-                    # pc.text(type(game.topCriticScore)),
+                    pc.text(game.genre),
 
                     pc.hstack(
                         pc.icon(tag="star"),
-                        pc.text(game.name),
+                        pc.text(game.title),
                     ),
-
-                    href=game.url,
                     
                     padding = "5px",
                 ),
+                href=game.game_url,
                 _hover={
                         "transform": "scale(1.25)",
                 },
@@ -115,13 +125,14 @@ def home():
             navbar(State),
 
             pc.heading("Popular Games"),
-            pc.text("Don't miss the most popular games on OpenCritics today"),
+            pc.text("Don't miss the most popular games on GameHub today"),
 
             pc.hstack(
                 pc.foreach(
                     HomeState.games,
                     linker,
-            )
+                ),
+                style=style_list_game,
             ),
             
             padding_top="6em",
@@ -130,27 +141,3 @@ def home():
     
 
 app = pc.App(state=HomeState)
-
-
-"""
-{
-	'images': {'banner': {'og': 'game/4002/o/F7I02fQd.jpg', 'sm': 'game/4002/Xcjz43Bf.jpg'}},
-    'percentRecommended': 98.46153846153847,
-    'numReviews': 67,
-    'topCriticScore': 89.60526315789474,
-    'tier': 'Mighty',
-    'name': 'Hollow Knight',
-    'Platforms':
-    [
-    	{'id': 27, 'name': 'PC', 'shortName': 'PC', 'releaseDate': '2017-02-24T00:00:00.000Z'},
-        {'id': 32, 'name': 'Nintendo Switch', 'shortName': 'Switch', 'releaseDate': '2018-06-12T00:00:00.000Z'},
-        {'id': 6, 'name': 'PlayStation 4', 'shortName': 'PS4', 'releaseDate': '2018-09-25T00:00:00.000Z'},
-        {'id': 7, 'name': 'Xbox One', 'shortName': 'XB1', 'releaseDate': '2018-09-25T00:00:00.000Z'},
-        {'id': 2, 'name': 'Xbox Series X/S', 'shortName': 'XBXS', 'releaseDate': '2020-11-10T00:00:00.000Z'},
-        {'id': 3, 'name': 'PlayStation 5', 'shortName': 'PS5', 'releaseDate': '2020-11-12T00:00:00.000Z'}
-    ],
-    'id': 4002,
-    'firstReleaseDate': '2017-02-24T00:00:00.000Z',
-    'url': 'https://opencritic.com/game/4002/hollow-knight'
-}
-"""
