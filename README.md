@@ -17,6 +17,7 @@ Users can search and browse for games, and look up details about them. This proj
 ## Data Sources
 We plan to use the following APIs to aggregate information about video games:
 
+- [Free-to-Play Games Database API](https://rapidapi.com/digiwalls/api/free-to-play-games-database)
 - [RAWG Video Games Database API](https://rapidapi.com/accujazz/api/rawg-video-games-database)
 - [IGDB API](https://rapidapi.com/stefan.skliarov/api/GameDatabase)
 - [SteamWeb API](https://rapidapi.com/search/steam)
